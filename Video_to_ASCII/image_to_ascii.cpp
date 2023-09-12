@@ -10,7 +10,7 @@ string pixelToASCII(Vec3b pixel) {
 
     // backwards string is : "   ._-=+*!&#%$@"
     //const string ASCII_Shaders = "@$%#&!*+=-.   ";
-    const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";          // Muted the highlights and shadows for even look
+    const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";          // Muted the highlights and shadows for even look (Best look in my opinion)
     //const string ASCII_Shaders = "   ._-=+*!&#%$@";       // Better looking one
     //const string ASCII_Shaders = " .,'_-^=+*!)#&%$@";
 
