@@ -8,11 +8,7 @@ using namespace cv;
 
 string pixelToASCII(Vec3b pixel) {
 
-    // backwards string is : "   ._-=+*!&#%$@"
-    //const string ASCII_Shaders = " .,'_-^=+*!)#&%$@";
-    //const string ASCII_Shaders = "@$%#&!*+=-.   ";
-    //const string ASCII_Shaders = "   ._-=+*!&#%$@";       // Better looking one
-    const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";          // Muted the highlights and shadows for even look (Best look in my opinion)
+    const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";
 
     int intensity = (pixel[0] + pixel[1] + pixel[2]) / 3;
     int index = intensity * (ASCII_Shaders.length() - 1) / 255;
@@ -23,9 +19,9 @@ string pixelToASCII(Vec3b pixel) {
 void printASCIIArt(const Mat& frame, int width, int height) {
     string ascii_frame;
 
-    for (int i = 0; i < height; i++) 
+    for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width; j++) 
+        for (int j = 0; j < width; j++)
         {
             Vec3b pixel = frame.at<Vec3b>(i, j);
             ascii_frame += pixelToASCII(pixel);
@@ -35,6 +31,10 @@ void printASCIIArt(const Mat& frame, int width, int height) {
 
     cout << "\033[H";
     cout << ascii_frame;
+}
+
+void Worker1() {
+    printASCIIArt(resized_frame, width, height);
 }
 
 int main() {
@@ -47,8 +47,6 @@ int main() {
     int width = 120;
     int height = 50;
 
-    int fixed_fps_cap = static_cast<int>(1000 / 24);
-
     Mat frame, resized_frame;
 
     while (true) {
@@ -56,10 +54,11 @@ int main() {
 
         resize(frame, resized_frame, Size(width, height), 0, 0, INTER_AREA);
 
-        printASCIIArt(resized_frame, width, height);
+        // thread 1
+        thread workerThread(Worker1);
+        
 
-        //this_thread::sleep_for(chrono::milliseconds(1000/CAP_PROP_FPS));
-        this_thread::sleep_for(chrono::milliseconds(fixed_fps_cap));
+        this_thread::sleep_for(chrono::milliseconds(1000 / CAP_PROP_FPS));
     }
 
     video.release();
