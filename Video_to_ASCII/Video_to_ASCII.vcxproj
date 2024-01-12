@@ -139,8 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ascii_optimized.cpp" />
+    <ClCompile Include="heat_map_view.cpp" />
     <ClCompile Include="image_to_ascii.cpp" />
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="full_color.cpp" />
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="required_lib.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
