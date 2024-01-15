@@ -1,19 +1,11 @@
-#include <opencv2/opencv.hpp>
-#include <iostream>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-
-#define LEAN_AND_MEAN
-#define NOMINMAX
+#include "required_lib.h"
 
 using namespace std;
 using namespace cv;
 
 
 
-
-string pixelToASCII(Vec3b pixel) {
+string pixelToASCII_bnw(Vec3b pixel) {
 
     // backwards string is : "   ._-=+*!&#%$@"
     //const string ASCII_Shaders = " .,'_-^=+*!)#&%$@";
@@ -31,7 +23,7 @@ string pixelToASCII(Vec3b pixel) {
 
 
 
-void printASCIIArt(const Mat& frame, int width, int height) {
+void printASCIIArt_bnw(const Mat& frame, int width, int height) {
     string ascii_frame;
 
     for (int i = 0; i < height; i++)
@@ -39,11 +31,11 @@ void printASCIIArt(const Mat& frame, int width, int height) {
         for (int j = 0; j < width; j++)
         {
             Vec3b pixel = frame.at<Vec3b>(i, j);
-            ascii_frame += pixelToASCII(pixel);
+            ascii_frame += pixelToASCII_bnw(pixel);
         }
         ascii_frame += '\n';
     }
-
+ 
     cout << "\033[H";
     cout << ascii_frame;
 }
@@ -51,38 +43,68 @@ void printASCIIArt(const Mat& frame, int width, int height) {
 
 
 
-
-int main() {
+void asciiOptimized(controlVariables* obj) {
 
     VideoCapture video(0);
     if (!video.isOpened()) {
         cerr << "Camera not available !" << endl;
-        return -1;
+        return;
     }
 
     Mat frame, resized_frame;
 
+    int USER_DEFINED_FPS = obj->USER_DEFINED_FPS;
 
-    int width = 300;
-    int height = 100;
-    int USER_DEFINED_FPS = 24;
-
-    int fixed_fps_cap = static_cast<int>(1000 / USER_DEFINED_FPS);
 
     system("cls");
 
-    while (true) {
+    while ( true ) {
         video >> frame;
         
-        resize(frame, resized_frame, Size(width, height), 0, 0, INTER_AREA);
+        resize(frame, resized_frame, Size(obj->VIEWPORT_WIDTH, obj->VIEWPORT_HEIGHT), 0, 0, INTER_AREA);
 
-        printASCIIArt(resized_frame, width, height);
+        cout << "FPS : " << to_string(obj->USER_DEFINED_FPS) << "\t\t|\t\t"
+            << "Frame Time : " << to_string(obj->frame_time) << "ms" << "\t\t|\t\t"
+            << "Resolution : " << obj->VIEWPORT_WIDTH << " x " << obj->VIEWPORT_HEIGHT 
+            << "\t\t|" << endl;
+        
+        printASCIIArt_bnw(resized_frame, obj->VIEWPORT_WIDTH, obj->VIEWPORT_HEIGHT);
 
-        this_thread::sleep_for(chrono::milliseconds(fixed_fps_cap));
+        this_thread::sleep_for(chrono::milliseconds(obj->frame_time));
+
+        // To increase Resolution
+        if (GetAsyncKeyState(VK_ADD) & 0x8000) {
+            system("cls");
+            obj->changeWindowSize(VK_SUBTRACT);
+            obj->changeWindowSize(VK_SUBTRACT);
+            obj->increaseResolution();
+        }
+
+        // To decrease Resolution
+        if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000) {
+            system("cls");
+            obj->changeWindowSize(VK_ADD);
+            obj->changeWindowSize(VK_ADD);
+            obj->decreaseResolution();
+        }
+
+        // To increase FPS
+        if (GetAsyncKeyState(0x56) & 0x8000) {
+            obj->inreaseFPS();
+        }
+
+        // To decrease FPS
+        if (GetAsyncKeyState(0x43) & 0x8000) {
+            obj->decreaseFPS();
+        }
+
+        // To Escape to Menu
+        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+            break;
+        }
     }
 
     video.release();
     video.~VideoCapture();
-
-    return 0;
+    return;
 }

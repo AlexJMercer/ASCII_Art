@@ -1,16 +1,7 @@
-﻿#include <opencv2/opencv.hpp>
-#include <iostream>
-#include <Windows.h>
-#include <chrono>
-#include <thread>
-
-#define LEAN_AND_MEAN
-#define NOMINMAX
+﻿#include "required_lib.h"
 
 using namespace std;
 using namespace cv;
-
-
 
 
 string pixelToASCII(Vec3b pixel) {
@@ -21,27 +12,26 @@ string pixelToASCII(Vec3b pixel) {
     //const string ASCII_Shaders = "   ._-=+*!&#%$@";       // Better looking one
 
     const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";          // Muted the highlights and shadows for even look (Best look in my opinion)
-    
+
     int intensity = (pixel[0] + pixel[1] + pixel[2]) / 3;
     int index = intensity * (ASCII_Shaders.length() - 1) / 255;
-    
+
     if (intensity < 85) {
         return "\033[0;31m" + string(1, ASCII_Shaders[index]);  // Red
     }
     else if (intensity < 170) {
         return "\033[0;32m" + string(1, ASCII_Shaders[index]);  // Green
     }
-    else  {
+    else {
         return "\033[0;34m" + string(1, ASCII_Shaders[index]);  // Blue
     }
-    
+
 }
 
 
 
 
-
-void printASCIIArt(const Mat& frame, int width, int height) {
+void printASCIIArt_heatmap(const Mat& frame, int width, int height) {
     string ascii_frame;
 
     for (int i = 0; i < height; i++)
@@ -61,23 +51,21 @@ void printASCIIArt(const Mat& frame, int width, int height) {
 
 
 
-
-int main() {
+void predatorVisionView(controlVariables* obj) {
 
     VideoCapture video(0);
     if (!video.isOpened()) {
         cerr << "Camera not available !" << endl;
-        return -1;
+        return;
     }
 
     Mat frame, resized_frame;
 
 
-    int height = 50;
-    int width = height * 3.5;
-    int USER_DEFINED_FPS = 30;
+    int height = obj->VIEWPORT_HEIGHT;
+    int width = obj->VIEWPORT_WIDTH;
+    int USER_DEFINED_FPS = obj->USER_DEFINED_FPS;
 
-    int fixed_fps_cap = static_cast<int>(1000 / USER_DEFINED_FPS);
 
     system("cls");
 
@@ -86,13 +74,32 @@ int main() {
 
         resize(frame, resized_frame, Size(width, height), 0, 0, INTER_AREA);
 
-        printASCIIArt(resized_frame, width, height);
+        cout << "FPS : " << to_string(obj->USER_DEFINED_FPS)
+            << "\t\t\t\t\t\t\tFrame Time : "
+            << to_string(obj->frame_time) << "ms" << endl;
 
-        this_thread::sleep_for(chrono::milliseconds(fixed_fps_cap));
+        printASCIIArt_heatmap(resized_frame, width, height);
+
+        this_thread::sleep_for(chrono::milliseconds(obj->frame_time));
+  
+
+        // To increase FPS
+        if (GetAsyncKeyState(0x56) & 0x8000) {
+            obj->inreaseFPS();
+        }
+
+        // To decrease FPS
+        if (GetAsyncKeyState(0x43) & 0x8000) {
+            obj->decreaseFPS();
+        }
+
+        if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
+            break;
+        }
     }
 
     video.release();
     video.~VideoCapture();
 
-    return 0;
+    return;
 }
