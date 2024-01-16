@@ -1,4 +1,5 @@
-﻿#include "required_lib.h"
+﻿#include "required_lib.hpp"
+
 
 using namespace std;
 using namespace cv;
@@ -14,7 +15,7 @@ string pixelToASCII(Vec3b pixel) {
     const string ASCII_Shaders = " ._-=+*!&#%$@$%#&!*+=-. ";          // Muted the highlights and shadows for even look (Best look in my opinion)
 
     int intensity = (pixel[0] + pixel[1] + pixel[2]) / 3;
-    int index = intensity * (ASCII_Shaders.length() - 1) / 255;
+    int index = static_cast<int>(intensity * (ASCII_Shaders.length() - 1) / 255);
 
     if (intensity < 85) {
         return "\033[0;31m" + string(1, ASCII_Shaders[index]);  // Red

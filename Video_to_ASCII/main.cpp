@@ -1,9 +1,4 @@
-#include "required_lib.h"
-
-// Files
-#include "ascii_optimized.cpp"
-#include "heat_map_view.cpp"
-#include "full_color.cpp"
+#include "required_lib.hpp"
 
 
 

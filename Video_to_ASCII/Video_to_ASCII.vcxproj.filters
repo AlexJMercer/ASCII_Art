@@ -36,12 +36,12 @@
     <ClCompile Include="variableClass.hpp">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="variableClass.cpp">
-      <Filter>Resource Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="required_lib.h">
+    <ClInclude Include="required_lib.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

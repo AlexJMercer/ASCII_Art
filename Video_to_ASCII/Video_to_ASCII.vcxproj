@@ -117,7 +117,6 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opencv_world480d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/FORCE:MULTIPLE %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -147,11 +146,11 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="full_color.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="variableClass.cpp" />
     <ClCompile Include="variableClass.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="required_lib.h" />
+    <ClInclude Include="headers.hpp" />
+    <ClInclude Include="required_lib.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

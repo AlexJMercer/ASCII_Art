@@ -1,4 +1,4 @@
-#include "required_lib.h"
+#include "required_lib.hpp"
 
 using namespace std;
 using namespace cv;
@@ -17,7 +17,7 @@ string pixelToASCII(Vec3b pixel, int c) {
 
     string pixel_value = to_string(pixel[2]) + ";" + to_string(pixel[1]) + ";" + to_string(pixel[0]);
 
-    int index = intensity * (ASCII_Shaders.length() - 1) / 255;
+    int index = static_cast<int>(intensity * (ASCII_Shaders.length() - 1) / 255);
 
     return "\033[38;" + to_string(c) + ";" + pixel_value + "m" + string(1, ASCII_Shaders[index]);
 }
