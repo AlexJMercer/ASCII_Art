@@ -76,14 +76,12 @@ void asciiOptimized(controlVariables* obj) {
         if (GetAsyncKeyState(VK_ADD) & 0x8000) {
             system("cls");
             obj->changeWindowSize(VK_SUBTRACT);
-            obj->changeWindowSize(VK_SUBTRACT);
             obj->increaseResolution();
         }
 
         // To decrease Resolution
         if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000) {
             system("cls");
-            obj->changeWindowSize(VK_ADD);
             obj->changeWindowSize(VK_ADD);
             obj->decreaseResolution();
         }

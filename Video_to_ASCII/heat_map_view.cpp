@@ -72,16 +72,30 @@ void predatorVisionView(controlVariables* obj) {
     while (true) {
         video >> frame;
 
-        resize(frame, resized_frame, Size(width, height), 0, 0, INTER_AREA);
+        resize(frame, resized_frame, Size(obj->VIEWPORT_WIDTH, obj->VIEWPORT_HEIGHT), 0, 0, INTER_AREA);
 
-        cout << "FPS : " << to_string(obj->USER_DEFINED_FPS)
-            << "\t\t\t\t\t\t\tFrame Time : "
-            << to_string(obj->frame_time) << "ms" << endl;
+        cout << "FPS : " << to_string(obj->USER_DEFINED_FPS) << "\t\t|\t\t"
+            << "Frame Time : " << to_string(obj->frame_time) << "ms" << "\t\t|\t\t"
+            << "Resolution : " << obj->VIEWPORT_WIDTH << " x " << obj->VIEWPORT_HEIGHT
+            << "\t\t|" << endl;
 
-        printASCIIArt_heatmap(resized_frame, width, height);
+        printASCIIArt_heatmap(resized_frame, obj->VIEWPORT_WIDTH, obj->VIEWPORT_HEIGHT);
 
         this_thread::sleep_for(chrono::milliseconds(obj->frame_time));
   
+        // To increase Resolution
+        if (GetAsyncKeyState(VK_ADD) & 0x8000) {
+            system("cls");
+            obj->changeWindowSize(VK_SUBTRACT);
+            obj->increaseResolution();
+        }
+
+        // To decrease Resolution
+        if (GetAsyncKeyState(VK_SUBTRACT) & 0x8000) {
+            system("cls");
+            obj->changeWindowSize(VK_ADD);
+            obj->decreaseResolution();
+        }
 
         // To increase FPS
         if (GetAsyncKeyState(0x56) & 0x8000) {

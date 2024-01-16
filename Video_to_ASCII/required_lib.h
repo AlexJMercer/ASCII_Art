@@ -11,5 +11,8 @@
 #define LEAN_AND_MEAN
 #define NOMINMAX
 
-
+// Function declarations
+void asciiOptimized(controlVariables* var);
+void predatorVisionView(controlVariables* var);
+void viewFullColor(controlVariables* var, int mode);
 

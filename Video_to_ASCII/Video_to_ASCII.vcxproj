@@ -148,6 +148,7 @@
     <ClCompile Include="full_color.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="variableClass.cpp" />
+    <ClCompile Include="variableClass.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="required_lib.h" />

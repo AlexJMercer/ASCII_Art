@@ -14,8 +14,7 @@ using namespace cv;
 
 int main() {
 
-	controlVariables var;
-	
+	controlVariables* var = new controlVariables;
 	
 	SHORT ch;
 	
@@ -40,19 +39,18 @@ int main() {
 		switch (ch)
 		{
 		case 1:
-			asciiOptimized(&var);
+			asciiOptimized(var);
 			break;
 		case 2:
-			predatorVisionView(&var);
+			predatorVisionView(var);
 			break;
 		case 3:
-			viewFullColor(&var, 2);
+			viewFullColor(var, 2);
 			break;
 		case 4:
-			viewFullColor(&var, 5);
+			viewFullColor(var, 5);
 			break;
 		case 5:
-			var.~controlVariables();
 			break;
 
 		default:
@@ -62,6 +60,7 @@ int main() {
 
 	} while (ch != 5);
 
+	delete var;
 
 	return 0;
 }
