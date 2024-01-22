@@ -3,8 +3,8 @@
 #include <opencv2/opencv.hpp>
 #include <string>
 
-// ascii_optimized
 
+// ascii_optimized
 std::string pixelToASCII_bnw(cv::Vec3b pixel);
 void printASCIIArt_bnw(const cv::Mat& frame, int width, int height);
 void asciiOptimized(controlVariables* obj);
